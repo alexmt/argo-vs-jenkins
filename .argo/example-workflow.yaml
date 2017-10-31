@@ -43,3 +43,75 @@ steps:
       artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
       artifacts.BINARY: "%%steps.build.outputs.artifacts.BINARY%%"
 
+---
+type: container
+version: 1
+name: example-test
+description: Run test
+
+inputs:
+  artifacts:
+    CODE:
+        path: /src
+    BINARY:
+        path: /src/main
+
+image: golang:1.6
+command: ["sh", "-c"]
+args: [cd /src && ls -ltr && go test -v]
+
+resources:
+    mem_mib: 256
+    cpu_cores: 0.1
+
+---
+type: container
+version: 1
+name: example-release
+description: release example (just sleeps for now)
+
+inputs:
+  artifacts:
+    BINARY:
+        path: /src/main
+    CODE:
+        path: /src
+
+outputs:
+  artifacts:
+    BINARY:
+      path: /src/main
+    CODE:
+      path: /src
+
+image: golang:1.6
+command: ["sh", "-c"]
+args: [cd /src && ls -ltr && sleep 10]
+
+resources:
+    mem_mib: 256
+    cpu_cores: 0.1
+
+---
+type: container
+version: 1
+name: example-build
+description: Build the code
+
+inputs:
+  artifacts:
+    CODE:
+      path: /src
+
+outputs:
+  artifacts:
+    BINARY:
+      path: /src/main
+
+image: golang:1.6
+command: ["sh", "-c"]
+args: [cd /src && ls -ltr && go build main.go]
+
+resources:
+  mem_mib: 256
+  cpu_cores: 0.1

@@ -6,9 +6,9 @@ description: Checks out a source repository to /src
 resources:
   mem_mib: 500
   cpu_cores: 0.1
-image: indiehosters/git
-command: ["bash", "-c"]
-args: ["git clone %%inputs.parameters.REPO%% /src && cd /src && git checkout %%inputs.parameters.COMMIT%%"]
+image: argoproj/argoscm:v2.0
+command: ["axscm"]
+args: ["clone", "%%inputs.parameters.REPO%%", "/src", "--commit", "%%inputs.parameters.COMMIT%%"]
 inputs:
   parameters:
     COMMIT:
