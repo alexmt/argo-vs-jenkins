@@ -1,0 +1,22 @@
+---
+type: workflow
+version: 1
+name: example-workflow-build
+description: Example build workflow
+
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+
+steps:
+-
+  checkout:
+    template: argo-checkout
+-
+  build:
+    template: example-build
+    arguments:
+      artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"

@@ -1,0 +1,27 @@
+---
+type: container
+version: 1
+name: example-release
+description: release example (just sleeps for now)
+
+inputs:
+  artifacts:
+    BINARY:
+        path: /src/main
+    CODE:
+        path: /src
+
+outputs:
+  artifacts:
+    BINARY:
+      path: /src/main
+    CODE:
+      path: /src
+
+image: golang:1.6
+command: ["sh", "-c"]
+args: [cd /src && ls -ltr && sleep 10]
+
+resources:
+    mem_mib: 256
+    cpu_cores: 0.1

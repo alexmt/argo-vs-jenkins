@@ -1,0 +1,21 @@
+---
+type: project
+version: 1
+name: CI Workflow 
+description: Run a CI workflow with approval step.
+
+actions:
+    run:
+        template: example-workflow-approval
+  
+categories: ["devops", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"demo\"]"
+    publisher: Applatix
+assets:
+    icon:     "/approval.png"
+    publisher_icon: "/AX_Pub.png"
+    detail:   "/README.md"

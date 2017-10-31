@@ -1,0 +1,74 @@
+---
+type: policy
+version: 1
+name: example-workflow-policy
+description: Trigger example-workflow on pushes, pull requests and as a cron job
+template: example-workflow-approval
+arguments:
+  parameters.REQUIRED_APPROVALS: " "
+  parameters.OPTIONAL_APPROVALS: " "
+#  parameters.NUMBER_OF_OPTIONAL_APPROVALS_NEEDED: 0
+#  parameters.TIMEOUT_IN_MINUTES: 10
+notifications:
+  -
+    when:
+      - on_start
+      - on_success
+      - on_failure
+      - on_change
+    whom:
+      - committer
+      - author
+when:
+  - event: on_push
+  - event: on_pull_request
+  - event: on_pull_request_merge
+  - event: on_cron
+    
+    schedule: "*/15 * * * *"
+    timezone: "US/Pacific"
+
+---
+type: policy
+version: 1
+name: example-workflow-policy-15mins
+description: Trigger example-workflow every 15 minute
+template: example-workflow-approval
+arguments:
+  parameters.REQUIRED_APPROVALS: " "
+  parameters.OPTIONAL_APPROVALS: " "
+#  parameters.NUMBER_OF_OPTIONAL_APPROVALS_NEEDED: 0
+#  parameters.TIMEOUT_IN_MINUTES: 10
+when:
+  - event: on_cron
+    schedule: "*/15 * * * *"
+    timezone: "US/Pacific"
+
+---
+type: policy
+version: 1    
+name: example-workflow-policy-onpush
+description: Trigger example-workflow on pushes
+template: example-workflow-approval
+arguments:
+  parameters.REQUIRED_APPROVALS: " "
+  parameters.OPTIONAL_APPROVALS: " "
+#  parameters.NUMBER_OF_OPTIONAL_APPROVALS_NEEDED: 0
+#  parameters.TIMEOUT_IN_MINUTES: 10
+notifications:
+  -
+    when:
+      - on_start
+      - on_success
+      - on_failure
+    whom:
+      - committer
+  -
+    when:
+      - on_change
+    whom:
+      - author
+when:
+  - event: on_push
+  - event: on_pull_request
+  - event: on_pull_request_merge

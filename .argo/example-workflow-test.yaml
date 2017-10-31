@@ -1,0 +1,38 @@
+---
+type: workflow
+version: 1
+name: example-workflow-test
+description: Example test workflow
+
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+
+steps:
+-
+  checkout:
+    template: argo-checkout
+-
+  build:
+    template: example-build
+    arguments:
+      artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+-
+  test1:
+    template: example-test
+    arguments:
+      artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+      artifacts.BINARY: "%%steps.build.outputs.artifacts.BINARY%%"
+  test2:
+    template: example-test
+    arguments:
+      artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+      artifacts.BINARY: "%%steps.build.outputs.artifacts.BINARY%%"
+  test3:
+    template: example-test
+    arguments:
+      artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+      artifacts.BINARY: "%%steps.build.outputs.artifacts.BINARY%%"
