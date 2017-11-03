@@ -1,26 +1,28 @@
-pipeline {
-    agent { docker { image 'golang' } }
-    stages {
+podTemplate(label: 'ci-workflow', containers: [
+    containerTemplate(name: 'golang', image: 'golang', ttyEnabled: true, command: 'cat')
+]) {
+    node('kube') {
         stage('Build') {
-            steps {
-                sh 'find . && go build main.go'
+            container('golang') {
+                git 'https://github.com/alexmt/argo-vs-jenkins.git'
+                sh 'go build main.go'
             }
         }
 
-        stage('Test') {
+        stage('Release') {
             parallel {
                 stage('Test 1') {
-                    steps {
+                    container('golang') {
                         sh "go test -v"
                     }
                 }
                 stage('Test 2') {
-                    steps {
+                    container('golang') {
                         sh "go test -v"
                     }
                 }
                 stage('Test 3') {
-                    steps {
+                    container('golang') {
                         sh "go test -v"
                     }
                 }
@@ -28,7 +30,7 @@ pipeline {
         }
 
         stage('Release') {
-            steps {
+            container('golang') {
                 sh './main'
             }
         }
